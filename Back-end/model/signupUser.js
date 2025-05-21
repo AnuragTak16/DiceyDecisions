@@ -14,10 +14,6 @@ const signupUserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  confirmPassword: {
-    type: String,
-    required: true,
-  },
 });
 
 const SignupUser = mongoose.model("SignupUser", signupUserSchema);

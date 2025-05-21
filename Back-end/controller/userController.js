@@ -8,16 +8,10 @@ const home = (req, res) => {
 
 //signup API
 const signup = async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password } = req.body;
 
-  if (!name || !email || !password || !confirmPassword) {
+  if (!name || !email || !password) {
     return res.status(422).json({ error: "Please fill all the fields" });
-  }
-
-  if (password !== confirmPassword) {
-    return res
-      .status(422)
-      .json({ error: "Password and Confirm Password do not match" });
   }
 
   try {
