@@ -1,35 +1,23 @@
-import { useState } from "react";
-import { useSignupUserMutation } from "../../api/signup";
+import React, { useState } from "react";
+import { useSigninUserMutation } from "../../api/login";
 import { useNavigate } from "@tanstack/react-router";
 
-export const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+export const LoginPage = () => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [rememberMe, setRememberMe] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
+  const [signinUser] = useSigninUserMutation();
   const navigate = useNavigate();
 
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [signupUser] = useSignupUserMutation();
-
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setSuccess(null);
-    setError(null);
 
     if (!termsAccepted) {
       setError("You must accept the Terms of Service and Privacy Policy.");
@@ -37,25 +25,19 @@ export const Signup = () => {
     }
 
     try {
-      await signupUser({
-        name: formData.name,
+      const response = await signinUser({
         email: formData.email,
         password: formData.password,
       }).unwrap();
 
-      setSuccess("Account created successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-      });
+      navigate({ to: "/home" });
 
-      navigate({ to: "/login" });
-
+      setSuccess("Signed in successfully!");
+      setFormData({ email: "", password: "" });
       setTermsAccepted(false);
+      console.log("Login response:", response);
     } catch (err) {
-      setError("Signup failed. Please try again.");
-      console.error("Signup error:", err);
+      console.error("Signin error:", err);
     }
   };
 
@@ -64,44 +46,24 @@ export const Signup = () => {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Create your account
+            Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account?{" "}
+            Don’t have an account?{" "}
             <a
-              href="#"
+              href="/signup"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
-              Sign in
+              Sign up
             </a>
           </p>
         </div>
 
-        {/* Error/Success messages */}
         {error && <p className="text-red-600 text-sm">{error}</p>}
         {success && <p className="text-green-600 text-sm">{success}</p>}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="John Doe"
-              />
-            </div>
-
             <div>
               <label
                 htmlFor="email"
@@ -133,7 +95,7 @@ export const Signup = () => {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 value={formData.password}
                 onChange={handleChange}
@@ -153,7 +115,7 @@ export const Signup = () => {
               className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the{" "}
+              I accept the{" "}
               <a
                 href="#"
                 className="font-medium text-blue-600 hover:text-blue-500"
@@ -170,12 +132,40 @@ export const Signup = () => {
             </label>
           </div>
 
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember"
+                name="remember"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label
+                htmlFor="remember"
+                className="ml-2 block text-sm text-gray-900"
+              >
+                Remember me
+              </label>
+            </div>
+
+            <div className="text-sm">
+              <a
+                href="#"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                Forgot your password?
+              </a>
+            </div>
+          </div>
+
           <div>
             <button
               type="submit"
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Sign up
+              Sign in
             </button>
           </div>
         </form>

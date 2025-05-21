@@ -12,6 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root';
 import { Route as SignupImport } from './routes/signup';
+import { Route as LoginImport } from './routes/login';
+import { Route as HomeImport } from './routes/home';
 
 // Create/Update Routes
 
@@ -21,10 +23,36 @@ const SignupRoute = SignupImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const HomeRoute = HomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRoute,
+} as any);
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/home': {
+      id: '/home';
+      path: '/home';
+      fullPath: '/home';
+      preLoaderRoute: typeof HomeImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/login': {
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
     '/signup': {
       id: '/signup';
       path: '/signup';
@@ -38,32 +66,42 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
+  '/home': typeof HomeRoute;
+  '/login': typeof LoginRoute;
   '/signup': typeof SignupRoute;
 }
 
 export interface FileRoutesByTo {
+  '/home': typeof HomeRoute;
+  '/login': typeof LoginRoute;
   '/signup': typeof SignupRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
+  '/home': typeof HomeRoute;
+  '/login': typeof LoginRoute;
   '/signup': typeof SignupRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/signup';
+  fullPaths: '/home' | '/login' | '/signup';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/signup';
-  id: '__root__' | '/signup';
+  to: '/home' | '/login' | '/signup';
+  id: '__root__' | '/home' | '/login' | '/signup';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
+  HomeRoute: typeof HomeRoute;
+  LoginRoute: typeof LoginRoute;
   SignupRoute: typeof SignupRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  HomeRoute: HomeRoute,
+  LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
 };
 
@@ -77,8 +115,16 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/home",
+        "/login",
         "/signup"
       ]
+    },
+    "/home": {
+      "filePath": "home.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"
