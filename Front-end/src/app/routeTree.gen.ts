@@ -10,53 +10,81 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as SignupImport } from './routes/signup';
-import { Route as LoginImport } from './routes/login';
-import { Route as HomeImport } from './routes/home';
+import { Route as rootRoute } from "./routes/__root";
+import { Route as SignupImport } from "./routes/signup";
+import { Route as RoomImport } from "./routes/room";
+import { Route as LoginImport } from "./routes/login";
+import { Route as DashboardImport } from "./routes/dashboard";
+import { Route as IndexImport } from "./routes/index";
 
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
-  id: '/signup',
-  path: '/signup',
+  id: "/signup",
+  path: "/signup",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const RoomRoute = RoomImport.update({
+  id: "/room",
+  path: "/room",
   getParentRoute: () => rootRoute,
 } as any);
 
 const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => rootRoute,
 } as any);
 
-const HomeRoute = HomeImport.update({
-  id: '/home',
-  path: '/home',
+const DashboardRoute = DashboardImport.update({
+  id: "/dashboard",
+  path: "/dashboard",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const IndexRoute = IndexImport.update({
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
 } as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/home': {
-      id: '/home';
-      path: '/home';
-      fullPath: '/home';
-      preLoaderRoute: typeof HomeImport;
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
-    '/login': {
-      id: '/login';
-      path: '/login';
-      fullPath: '/login';
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
       preLoaderRoute: typeof LoginImport;
       parentRoute: typeof rootRoute;
     };
-    '/signup': {
-      id: '/signup';
-      path: '/signup';
-      fullPath: '/signup';
+    "/room": {
+      id: "/room";
+      path: "/room";
+      fullPath: "/room";
+      preLoaderRoute: typeof RoomImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/signup": {
+      id: "/signup";
+      path: "/signup";
+      fullPath: "/signup";
       preLoaderRoute: typeof SignupImport;
       parentRoute: typeof rootRoute;
     };
@@ -66,42 +94,52 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/home': typeof HomeRoute;
-  '/login': typeof LoginRoute;
-  '/signup': typeof SignupRoute;
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/login": typeof LoginRoute;
+  "/room": typeof RoomRoute;
+  "/signup": typeof SignupRoute;
 }
 
 export interface FileRoutesByTo {
-  '/home': typeof HomeRoute;
-  '/login': typeof LoginRoute;
-  '/signup': typeof SignupRoute;
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/login": typeof LoginRoute;
+  "/room": typeof RoomRoute;
+  "/signup": typeof SignupRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
-  '/home': typeof HomeRoute;
-  '/login': typeof LoginRoute;
-  '/signup': typeof SignupRoute;
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/login": typeof LoginRoute;
+  "/room": typeof RoomRoute;
+  "/signup": typeof SignupRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/home' | '/login' | '/signup';
+  fullPaths: "/" | "/dashboard" | "/login" | "/room" | "/signup";
   fileRoutesByTo: FileRoutesByTo;
-  to: '/home' | '/login' | '/signup';
-  id: '__root__' | '/home' | '/login' | '/signup';
+  to: "/" | "/dashboard" | "/login" | "/room" | "/signup";
+  id: "__root__" | "/" | "/dashboard" | "/login" | "/room" | "/signup";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  HomeRoute: typeof HomeRoute;
+  IndexRoute: typeof IndexRoute;
+  DashboardRoute: typeof DashboardRoute;
   LoginRoute: typeof LoginRoute;
+  RoomRoute: typeof RoomRoute;
   SignupRoute: typeof SignupRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  HomeRoute: HomeRoute,
+  IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  RoomRoute: RoomRoute,
   SignupRoute: SignupRoute,
 };
 
@@ -115,16 +153,24 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/home",
+        "/",
+        "/dashboard",
         "/login",
+        "/room",
         "/signup"
       ]
     },
-    "/home": {
-      "filePath": "home.tsx"
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/dashboard": {
+      "filePath": "dashboard.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/room": {
+      "filePath": "room.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"

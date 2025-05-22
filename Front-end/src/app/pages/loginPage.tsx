@@ -25,12 +25,18 @@ export const LoginPage = () => {
     }
 
     try {
-      const response = await signinUser({
+      const response = (await signinUser({
         email: formData.email,
         password: formData.password,
-      }).unwrap();
+      }).unwrap()) as {
+        token: string;
+        user: { id: string; name: string; email: string };
+      };
 
-      navigate({ to: "/home" });
+      // Store token in localStorage
+      localStorage.setItem("token", response.token);
+
+      navigate({ to: "/dashboard" });
 
       setSuccess("Signed in successfully!");
       setFormData({ email: "", password: "" });

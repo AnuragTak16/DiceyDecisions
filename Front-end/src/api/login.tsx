@@ -4,7 +4,7 @@ export const SigninUser = baseApi.injectEndpoints({
   endpoints: (build) => ({
     signinUser: build.mutation<unknown, unknown>({
       query: (newUser) => ({
-        url: "/signin",
+        url: "/login",
         method: "POST",
         body: newUser,
         headers: {

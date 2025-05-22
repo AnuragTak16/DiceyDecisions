@@ -6,7 +6,6 @@ import "./index.css";
 import { routeTree } from "./app/routeTree.gen";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-// Import the generated route tree
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -23,9 +22,9 @@ if (rootElement) {
   const root = createRoot(rootElement);
   root.render(
     <StrictMode>
+      {/* Rtk provider */}
       <Provider store={store}>
         {" "}
-        {/* Rtk provider */}
         <RouterProvider router={router} /> {/*tanstack provider */}
       </Provider>
     </StrictMode>
