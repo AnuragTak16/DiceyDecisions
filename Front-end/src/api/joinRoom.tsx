@@ -1,23 +1,23 @@
 import { baseApi, TAGS } from "../store/api";
 
-export const createRoom = baseApi.injectEndpoints({
+export const joinRoom = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    createRoom: build.mutation<unknown, unknown>({
-      query: (roomData) => {
+    joinRoom: build.mutation<unknown, unknown>({
+      query: (joinRoomData) => {
         const token = localStorage.getItem("token");
         return {
-          url: "/room",
+          url: "/join",
           method: "POST",
-          body: roomData,
+          body: joinRoomData,
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
         };
       },
-      invalidatesTags: [TAGS.ROOMS],
+      invalidatesTags: [TAGS.USERS],
     }),
   }),
 });
 
-export const { useCreateRoomMutation } = createRoom;
+export const { useJoinRoomMutation } = joinRoom;

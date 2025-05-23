@@ -15,6 +15,7 @@ const baseQuery = fetchBaseQuery({
 
 export const TAGS = {
   USERS: "User",
+  ROOMS: "Room",
 } as const;
 
 export const baseApi = createApi({

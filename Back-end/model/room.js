@@ -17,7 +17,7 @@ const roomSchema = new mongoose.Schema({
   },
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "SigninUser",
+    ref: "SignupUser",
     required: true,
   },
   roomCode: {
@@ -37,6 +37,13 @@ const roomSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  participants: [
+    {
+      name: { type: String, required: true },
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "SignupUser" },
+      joinedAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 const Room = mongoose.model("Room", roomSchema);

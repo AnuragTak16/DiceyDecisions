@@ -8,12 +8,10 @@ const authenticate = async (req, res, next) => {
   }
 
   try {
-    console.log("verify", jwt.verify(token, process.env.JWT_SECRET));
-
+    // console.log("verify", jwt.verify(token, process.env.JWT_SECRET));
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await SignupUser.findById(decoded.userId);
-    console.log("user-1", user);
+    // console.log("user-1", user);
 
     if (!user) {
       return res.status(401).json({ message: "Invalid user" });

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Dice3, Users, BookText, ChevronRight } from "lucide-react";
 import { useCreateRoomMutation } from "../../api/roomhandler";
+import { useJoinRoomMutation } from "../../api/joinRoom";
+import { useNavigate } from "@tanstack/react-router";
+import { useGetCreatedRoomsQuery } from "../../api/creator-room";
 
 export const DashBoardPage = () => {
   const [activeTab, setActiveTab] = useState("create");
@@ -8,8 +11,15 @@ export const DashBoardPage = () => {
   const [description, setDescription] = useState("");
   const [maxParticipants, setMaxParticipants] = useState("");
   const [roomCode, setRoomCode] = useState("");
-  const [displayName, setDisplayName] = useState("");
+
   const [createRoom] = useCreateRoomMutation();
+  const [joinRoom] = useJoinRoomMutation();
+  const { data: createdRooms = [] } = useGetCreatedRoomsQuery();
+  const navigate = useNavigate();
+
+  // here we check the button length
+  const hasCreatedRooms = createdRooms.length > 0;
+  console.log("hasCreatedRooms : ", hasCreatedRooms);
 
   const handleCreateRoom = async () => {
     console.log("Creating room with:", {
@@ -23,18 +33,31 @@ export const DashBoardPage = () => {
         description,
         maxParticipants,
       }).unwrap();
+      // await refetch();
+      navigate({ to: "/createdRoom" });
 
       console.log("Room created:", response);
-      // You can add success UI or redirect here
     } catch (err) {
       console.error("Error creating room:", err);
-      // Handle error UI here
     }
   };
 
-  const handleJoinRoom = () => {
-    console.log("Joining room with:", { roomCode, displayName });
-    // Handle room joining logic
+  const handleJoinRoom = async () => {
+    console.log("Joining room with:", { roomCode });
+
+    if (!roomCode.trim()) {
+      console.warn("Room code is required");
+      return;
+    }
+
+    try {
+      const response = await joinRoom({ roomCode }).unwrap();
+      console.log("Room joined:", response);
+      navigate({ to: "/createdRoom" });
+    } catch (err) {
+      console.error("Error joining room:", err);
+      alert("Failed to join room. Please check the code or try again.");
+    }
   };
 
   return (
@@ -45,20 +68,6 @@ export const DashBoardPage = () => {
             <Dice3 className="text-yellow-300" size={32} />
             <h1 className="text-3xl font-bold text-white">DiceyDecisions</h1>
           </div>
-          {/* <div className="flex items-center gap-4">
-            <button
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium"
-              onClick={handlesigninClick}
-            >
-              Sign In
-            </button>
-            <button
-              className="bg-yellow-500 hover:bg-yellow-600 text-indigo-900 px-4 py-2 rounded-lg font-medium"
-              onClick={handlesignupClick}
-            >
-              Sign Up
-            </button>
-          </div> */}
         </div>
       </header>
 
@@ -74,12 +83,20 @@ export const DashBoardPage = () => {
           </p>
 
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-medium text-lg flex items-center justify-center gap-2">
-              Create Decision Room
-              <ChevronRight size={20} />
-            </button>
+            {hasCreatedRooms && (
+              <button
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-medium text-lg flex items-center justify-center gap-2
+            "
+                onClick={() => {
+                  navigate({ to: "/createdRoom" });
+                }}
+              >
+                Your Available Rooms
+                <ChevronRight size={20} />
+              </button>
+            )}
             <button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-medium text-lg flex items-center justify-center gap-2">
-              Join With Code
+              Play Fun Games
               <ChevronRight size={20} />
             </button>
           </div>
@@ -169,18 +186,7 @@ export const DashBoardPage = () => {
                     onChange={(e) => setRoomCode(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label className="block text-indigo-200 mb-2">
-                    Your Display Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full bg-indigo-800/50 border border-indigo-600 rounded-lg px-4 py-2 text-white"
-                    placeholder="How others will see you"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                  />
-                </div>
+
                 <button
                   onClick={handleJoinRoom}
                   className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-medium text-lg"
