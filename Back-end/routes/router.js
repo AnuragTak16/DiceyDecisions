@@ -9,6 +9,7 @@ const {
   joinRoom,
   getCreatedRooms,
   roomDetails,
+  getParticipants,
 } = require("../controller/userController");
 
 //methods::
@@ -19,5 +20,6 @@ router.post("/room", authenticate, createRoom);
 router.post("/join", authenticate, joinRoom);
 router.get("/creatorRoom", authenticate, getCreatedRooms);
 router.get("/roomDetails", authenticate, roomDetails);
+router.get("/roomParticipant/:code", getParticipants);
 
 module.exports = router;

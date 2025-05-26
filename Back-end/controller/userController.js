@@ -132,13 +132,16 @@ const joinRoom = async (req, res) => {
   const alreadyJoined = room.participants.some(
     (p) => p.userId?.toString() === userId
   );
+
+  // ✅ If already joined, skip adding again and return success
   if (alreadyJoined) {
-    return res.status(400).json({ error: "User already joined" });
+    return res.json({ message: "Already joined", roomId: room._id });
   }
 
   const user = await SignupUser.findById(userId);
   if (!user) return res.status(404).json({ error: "User not found" });
 
+  // Add user to participants list
   room.participants.push({
     name: user.name,
     userId: user._id,
@@ -207,6 +210,25 @@ const roomDetails = async (req, res) => {
   }
 };
 
+// Get room participants by room code and link
+const getParticipants = async (req, res) => {
+  console.log("room", req.params.code);
+
+  try {
+    const room = await Room.findOne({ roomCode: req.params.code });
+    // .populate("participants.userId", "userName", " email")
+    // .exec();
+
+    if (!room) return res.status(404).json({ message: "Room not found" });
+
+    res.json(room.participants);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+//Decision API
+
 module.exports = {
   signup,
   home,
@@ -215,4 +237,5 @@ module.exports = {
   joinRoom,
   getCreatedRooms,
   roomDetails,
+  getParticipants,
 };

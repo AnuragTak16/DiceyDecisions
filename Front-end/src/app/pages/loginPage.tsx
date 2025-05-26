@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSigninUserMutation } from "../../api/login";
 import { useNavigate } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -50,6 +51,17 @@ export const LoginPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
+        <div className="fixed top-4 left-4">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
+            className="flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-blue-600 hover:bg-gray-100 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Back
+          </button>
+        </div>
+
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Sign in to your account

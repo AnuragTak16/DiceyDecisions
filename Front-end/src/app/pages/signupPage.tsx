@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSignupUserMutation } from "../../api/signup";
 import { useNavigate } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 
 export const Signup = () => {
   const [formData, setFormData] = useState({
@@ -80,6 +81,18 @@ export const Signup = () => {
         {/* Error/Success messages */}
         {error && <p className="text-red-600 text-sm">{error}</p>}
         {success && <p className="text-green-600 text-sm">{success}</p>}
+
+        {/* Back Button */}
+        <div className="fixed top-4 left-4">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
+            className="flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-blue-600 hover:bg-gray-100 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Back
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">

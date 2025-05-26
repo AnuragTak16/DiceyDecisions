@@ -1,8 +1,19 @@
 import { useGetRoomDetailQuery } from "@/api/roomDetails";
-import { Mail, Users, Link as LinkIcon, KeyRound, User2 } from "lucide-react";
+import {
+  Mail,
+  Users,
+  Link as LinkIcon,
+  KeyRound,
+  User2,
+  ChevronRight,
+} from "lucide-react";
+
+import { useNavigate } from "@tanstack/react-router";
+// import { RoomView } from "@/app/pages/votingRoom";
 
 export const ShowRoomsDetails = () => {
   const { data: rooms, isLoading, error } = useGetRoomDetailQuery();
+  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -49,20 +60,39 @@ export const ShowRoomsDetails = () => {
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-indigo-500" />
-                {room.creatorId?.email}
+                {room.creatorIdroomView?.email}
               </p>
             </div>
 
-            <div className="mt-4">
-              <a
-                href={room.inviteLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition"
-              >
-                <LinkIcon className="w-4 h-4" />
-                Join Room
-              </a>
+            <div className="mt-6 flex justify-between">
+              <div className="">
+                <button
+                  className="mt-5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-5 py-3 rounded-xl font-medium text-base md:text-lg flex items-center justify-center gap-2 shadow-md transition-all duration-200"
+                  onClick={() => {
+                    navigate({
+                      to: "/room/$id",
+                      params: { id: room.roomCode },
+                    });
+                  }}
+                >
+                  Move
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+              <div>
+                <button
+                  className="mt-5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-5 py-3 rounded-xl font-medium text-base md:text-lg flex items-center justify-center gap-2 shadow-md transition-all duration-200"
+                  onClick={() => {
+                    navigate({
+                      to: "/room/$id",
+                      params: { id: room.roomCode },
+                    });
+                  }}
+                >
+                  Remove
+                  <ChevronRight size={20} />
+                </button>
+              </div>
             </div>
           </div>
         ))}

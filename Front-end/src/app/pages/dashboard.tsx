@@ -1,3 +1,5 @@
+// After successful POST /joinRoom
+
 import { useState } from "react";
 import { Dice3, Users, BookText, ChevronRight } from "lucide-react";
 import { useCreateRoomMutation } from "../../api/roomhandler";
@@ -15,6 +17,7 @@ export const DashBoardPage = () => {
   const [createRoom] = useCreateRoomMutation();
   const [joinRoom] = useJoinRoomMutation();
   const { data: createdRooms = [] } = useGetCreatedRoomsQuery();
+
   const navigate = useNavigate();
 
   // here we check the button length
@@ -53,7 +56,7 @@ export const DashBoardPage = () => {
     try {
       const response = await joinRoom({ roomCode }).unwrap();
       console.log("Room joined:", response);
-      navigate({ to: "/createdRoom" });
+      navigate({ to: `/room/${roomCode}` });
     } catch (err) {
       console.error("Error joining room:", err);
       alert("Failed to join room. Please check the code or try again.");
