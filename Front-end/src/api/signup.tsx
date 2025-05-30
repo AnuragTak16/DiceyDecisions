@@ -1,6 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
-//How to write a fetch the signup api
-
 import { baseApi, TAGS } from "../store/api";
 
 export const SignupUser = baseApi.injectEndpoints({

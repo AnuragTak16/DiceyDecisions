@@ -200,8 +200,15 @@ const getCreatedRooms = async (req, res) => {
 
 const roomDetails = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const rooms = await Room.find({ creatorId: userId });
+    const userId = req.user._id;
+
+    const rooms = await Room.find({
+      $or: [{ creatorId: userId }, { "participants.userId": userId }],
+    })
+      .populate("creatorId", "name email") // This is the key part you're missing
+      .sort({ createdAt: -1 });
+
+    console.log(`Fetched ${rooms.length} room(s) for user ${userId}`);
 
     res.status(200).json(rooms);
   } catch (error) {
@@ -216,14 +223,29 @@ const getParticipants = async (req, res) => {
 
   try {
     const room = await Room.findOne({ roomCode: req.params.code });
-    // .populate("participants.userId", "userName", " email")
-    // .exec();
-
     if (!room) return res.status(404).json({ message: "Room not found" });
 
     res.json(room.participants);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+//delete room
+const deleteRoom = async (req, res) => {
+  const roomId = req.params.id;
+  try {
+    console.log("Deleting room with ID:", req.params.id);
+
+    const room = await Room.findByIdAndDelete(req.params.id);
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    res.status(200).json({ message: "Room deleted successfully" });
+  } catch (err) {
+    console.error("Error in deleteRoom:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -238,4 +260,5 @@ module.exports = {
   getCreatedRooms,
   roomDetails,
   getParticipants,
+  deleteRoom,
 };

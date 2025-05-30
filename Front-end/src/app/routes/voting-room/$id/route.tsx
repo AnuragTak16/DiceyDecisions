@@ -1,11 +1,11 @@
-import { RoomView } from "@/app/pages/createVoting";
 import { createFileRoute } from "@tanstack/react-router";
+import { VotingRoom } from "@/app/pages/voting_room";
 
-export const Route = createFileRoute("/room/$id")({
+export const Route = createFileRoute("/voting-room/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { id } = Route.useParams();
-  return <RoomView voteId={id} />;
+  return <VotingRoom voteId={id} />;
 }

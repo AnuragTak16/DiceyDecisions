@@ -56,7 +56,8 @@ export const DashBoardPage = () => {
     try {
       const response = await joinRoom({ roomCode }).unwrap();
       console.log("Room joined:", response);
-      navigate({ to: `/room/${roomCode}` });
+      // navigate({ to: `/room/${roomCode}` });
+      navigate({ to: "/votingRoom" });
     } catch (err) {
       console.error("Error joining room:", err);
       alert("Failed to join room. Please check the code or try again.");
