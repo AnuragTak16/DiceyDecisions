@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const authenticate = require("../middleware/authentication");
+const authenticate = require('../middleware/authentication');
 const {
   signup,
   home,
@@ -9,40 +9,40 @@ const {
   joinRoom,
   getCreatedRooms,
   roomDetails,
-  getParticipants,
-  deleteRoom,
-} = require("../controller/userController");
+  getParticipantNames,
+} = require('../controller/userController');
 
 const {
   createVote,
   openVote,
   castVote,
   getResults,
-  closeVote,
   getVotes,
   getVotingList,
-} = require("../controller/voteController");
+  getPastPoll,
+  getvotingRoomId,
+} = require('../controller/voteController');
 
 //methods::
-router.get("/", home);
-router.post("/signup", signup);
-router.post("/login", loginPage);
-router.post("/room", authenticate, createRoom);
-router.post("/join", authenticate, joinRoom);
-router.get("/creatorRoom", authenticate, getCreatedRooms);
-router.get("/roomDetails", authenticate, roomDetails);
-router.delete("/rooms/:id", authenticate, deleteRoom);
-
-router.get("/roomParticipant/:code", getParticipants);
+router.get('/', home);
+router.post('/signup', signup);
+router.post('/login', loginPage);
+router.post('/room', authenticate, createRoom);
+router.post('/join', authenticate, joinRoom);
+router.get('/creatorRoom', authenticate, getCreatedRooms);
+router.get('/roomDetails', authenticate, roomDetails);
+router.get('/room/:roomcode/participants', getParticipantNames);
 
 //votes routes
 
-router.post("/vote", authenticate, createVote);
-router.post("/vote/:voteId/open", authenticate, openVote);
-router.post("/vote/:voteId/cast", authenticate, castVote);
-router.get("/votes", authenticate, closeVote);
-router.get("/:voteId/results", getResults);
-router.get("/vote/:roomId", authenticate, getVotes);
-router.get("/votingList", authenticate, getVotingList);
+router.post('/vote', authenticate, createVote);
+router.post('/vote/:voteId/open', authenticate, openVote);
+router.post('/vote/:voteId/cast', authenticate, castVote);
+router.get('/votes', authenticate);
+router.get('/:voteId/results', getResults);
+router.get('/vote/:roomId', authenticate, getVotes);
+router.get('/votingList', authenticate, getVotingList);
+router.get('/polls/byCreator/:creatorId', getPastPoll);
+router.get('/api/voting-room/:id', getvotingRoomId);
 
 module.exports = router;

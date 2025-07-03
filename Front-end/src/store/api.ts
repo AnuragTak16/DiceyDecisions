@@ -17,6 +17,7 @@ export const TAGS = {
   USERS: "User",
   ROOMS: "Room",
   VOTES: "Vote",
+  POLLS: "polls ",
 } as const;
 
 export const baseApi = createApi({

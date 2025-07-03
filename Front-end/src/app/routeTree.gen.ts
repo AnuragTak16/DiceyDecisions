@@ -10,179 +10,235 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as SignupImport } from './routes/signup';
-import { Route as RoomViewImport } from './routes/roomView';
-import { Route as LoginImport } from './routes/login';
-import { Route as JoinRoomImport } from './routes/joinRoom';
-import { Route as DashboardImport } from './routes/dashboard';
-import { Route as CreatedRoomImport } from './routes/createdRoom';
-import { Route as VotingRoomRouteImport } from './routes/voting-room/route';
-import { Route as RoomRouteImport } from './routes/room/route';
-import { Route as IndexImport } from './routes/index';
-import { Route as RoomVoteFormImport } from './routes/room/voteForm';
-import { Route as VotingRoomIdRouteImport } from './routes/voting-room/$id/route';
-import { Route as RoomIdRouteImport } from './routes/room/$id/route';
+import { Route as rootRoute } from "./routes/__root";
+import { Route as SignupImport } from "./routes/signup";
+import { Route as RoomViewImport } from "./routes/roomView";
+import { Route as LoginImport } from "./routes/login";
+import { Route as JoinRoomImport } from "./routes/joinRoom";
+import { Route as DashboardImport } from "./routes/dashboard";
+import { Route as CreatedRoomImport } from "./routes/createdRoom";
+import { Route as VotingRoomRouteImport } from "./routes/voting-room/route";
+import { Route as RoomRouteImport } from "./routes/room/route";
+import { Route as JoinCodeRouteImport } from "./routes/joinCode/route";
+import { Route as ParticipantRouteImport } from "./routes/Participant/route";
+import { Route as IndexImport } from "./routes/index";
+import { Route as RoomVoteFormImport } from "./routes/room/voteForm";
+import { Route as VotingRoomIdRouteImport } from "./routes/voting-room/$id/route";
+import { Route as RoomIdRouteImport } from "./routes/room/$id/route";
+import { Route as JoinCodeIdRouteImport } from "./routes/joinCode/$id/route";
+import { Route as ParticipantRoomCodeRouteImport } from "./routes/Participant/$roomCode/route";
 
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
-  id: '/signup',
-  path: '/signup',
+  id: "/signup",
+  path: "/signup",
   getParentRoute: () => rootRoute,
 } as any);
 
 const RoomViewRoute = RoomViewImport.update({
-  id: '/roomView',
-  path: '/roomView',
+  id: "/roomView",
+  path: "/roomView",
   getParentRoute: () => rootRoute,
 } as any);
 
 const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => rootRoute,
 } as any);
 
 const JoinRoomRoute = JoinRoomImport.update({
-  id: '/joinRoom',
-  path: '/joinRoom',
+  id: "/joinRoom",
+  path: "/joinRoom",
   getParentRoute: () => rootRoute,
 } as any);
 
 const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => rootRoute,
 } as any);
 
 const CreatedRoomRoute = CreatedRoomImport.update({
-  id: '/createdRoom',
-  path: '/createdRoom',
+  id: "/createdRoom",
+  path: "/createdRoom",
   getParentRoute: () => rootRoute,
 } as any);
 
 const VotingRoomRouteRoute = VotingRoomRouteImport.update({
-  id: '/voting-room',
-  path: '/voting-room',
+  id: "/voting-room",
+  path: "/voting-room",
   getParentRoute: () => rootRoute,
 } as any);
 
 const RoomRouteRoute = RoomRouteImport.update({
-  id: '/room',
-  path: '/room',
+  id: "/room",
+  path: "/room",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const JoinCodeRouteRoute = JoinCodeRouteImport.update({
+  id: "/joinCode",
+  path: "/joinCode",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ParticipantRouteRoute = ParticipantRouteImport.update({
+  id: "/Participant",
+  path: "/Participant",
   getParentRoute: () => rootRoute,
 } as any);
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
 } as any);
 
 const RoomVoteFormRoute = RoomVoteFormImport.update({
-  id: '/voteForm',
-  path: '/voteForm',
+  id: "/voteForm",
+  path: "/voteForm",
   getParentRoute: () => RoomRouteRoute,
 } as any);
 
 const VotingRoomIdRouteRoute = VotingRoomIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
+  id: "/$id",
+  path: "/$id",
   getParentRoute: () => VotingRoomRouteRoute,
 } as any);
 
 const RoomIdRouteRoute = RoomIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
+  id: "/$id",
+  path: "/$id",
   getParentRoute: () => RoomRouteRoute,
+} as any);
+
+const JoinCodeIdRouteRoute = JoinCodeIdRouteImport.update({
+  id: "/$id",
+  path: "/$id",
+  getParentRoute: () => JoinCodeRouteRoute,
+} as any);
+
+const ParticipantRoomCodeRouteRoute = ParticipantRoomCodeRouteImport.update({
+  id: "/$roomCode",
+  path: "/$roomCode",
+  getParentRoute: () => ParticipantRouteRoute,
 } as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
-    '/room': {
-      id: '/room';
-      path: '/room';
-      fullPath: '/room';
+    "/Participant": {
+      id: "/Participant";
+      path: "/Participant";
+      fullPath: "/Participant";
+      preLoaderRoute: typeof ParticipantRouteImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/joinCode": {
+      id: "/joinCode";
+      path: "/joinCode";
+      fullPath: "/joinCode";
+      preLoaderRoute: typeof JoinCodeRouteImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/room": {
+      id: "/room";
+      path: "/room";
+      fullPath: "/room";
       preLoaderRoute: typeof RoomRouteImport;
       parentRoute: typeof rootRoute;
     };
-    '/voting-room': {
-      id: '/voting-room';
-      path: '/voting-room';
-      fullPath: '/voting-room';
+    "/voting-room": {
+      id: "/voting-room";
+      path: "/voting-room";
+      fullPath: "/voting-room";
       preLoaderRoute: typeof VotingRoomRouteImport;
       parentRoute: typeof rootRoute;
     };
-    '/createdRoom': {
-      id: '/createdRoom';
-      path: '/createdRoom';
-      fullPath: '/createdRoom';
+    "/createdRoom": {
+      id: "/createdRoom";
+      path: "/createdRoom";
+      fullPath: "/createdRoom";
       preLoaderRoute: typeof CreatedRoomImport;
       parentRoute: typeof rootRoute;
     };
-    '/dashboard': {
-      id: '/dashboard';
-      path: '/dashboard';
-      fullPath: '/dashboard';
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
       preLoaderRoute: typeof DashboardImport;
       parentRoute: typeof rootRoute;
     };
-    '/joinRoom': {
-      id: '/joinRoom';
-      path: '/joinRoom';
-      fullPath: '/joinRoom';
+    "/joinRoom": {
+      id: "/joinRoom";
+      path: "/joinRoom";
+      fullPath: "/joinRoom";
       preLoaderRoute: typeof JoinRoomImport;
       parentRoute: typeof rootRoute;
     };
-    '/login': {
-      id: '/login';
-      path: '/login';
-      fullPath: '/login';
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
       preLoaderRoute: typeof LoginImport;
       parentRoute: typeof rootRoute;
     };
-    '/roomView': {
-      id: '/roomView';
-      path: '/roomView';
-      fullPath: '/roomView';
+    "/roomView": {
+      id: "/roomView";
+      path: "/roomView";
+      fullPath: "/roomView";
       preLoaderRoute: typeof RoomViewImport;
       parentRoute: typeof rootRoute;
     };
-    '/signup': {
-      id: '/signup';
-      path: '/signup';
-      fullPath: '/signup';
+    "/signup": {
+      id: "/signup";
+      path: "/signup";
+      fullPath: "/signup";
       preLoaderRoute: typeof SignupImport;
       parentRoute: typeof rootRoute;
     };
-    '/room/$id': {
-      id: '/room/$id';
-      path: '/$id';
-      fullPath: '/room/$id';
+    "/Participant/$roomCode": {
+      id: "/Participant/$roomCode";
+      path: "/$roomCode";
+      fullPath: "/Participant/$roomCode";
+      preLoaderRoute: typeof ParticipantRoomCodeRouteImport;
+      parentRoute: typeof ParticipantRouteImport;
+    };
+    "/joinCode/$id": {
+      id: "/joinCode/$id";
+      path: "/$id";
+      fullPath: "/joinCode/$id";
+      preLoaderRoute: typeof JoinCodeIdRouteImport;
+      parentRoute: typeof JoinCodeRouteImport;
+    };
+    "/room/$id": {
+      id: "/room/$id";
+      path: "/$id";
+      fullPath: "/room/$id";
       preLoaderRoute: typeof RoomIdRouteImport;
       parentRoute: typeof RoomRouteImport;
     };
-    '/voting-room/$id': {
-      id: '/voting-room/$id';
-      path: '/$id';
-      fullPath: '/voting-room/$id';
+    "/voting-room/$id": {
+      id: "/voting-room/$id";
+      path: "/$id";
+      fullPath: "/voting-room/$id";
       preLoaderRoute: typeof VotingRoomIdRouteImport;
       parentRoute: typeof VotingRoomRouteImport;
     };
-    '/room/voteForm': {
-      id: '/room/voteForm';
-      path: '/voteForm';
-      fullPath: '/room/voteForm';
+    "/room/voteForm": {
+      id: "/room/voteForm";
+      path: "/voteForm";
+      fullPath: "/room/voteForm";
       preLoaderRoute: typeof RoomVoteFormImport;
       parentRoute: typeof RoomRouteImport;
     };
@@ -190,6 +246,29 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface ParticipantRouteRouteChildren {
+  ParticipantRoomCodeRouteRoute: typeof ParticipantRoomCodeRouteRoute;
+}
+
+const ParticipantRouteRouteChildren: ParticipantRouteRouteChildren = {
+  ParticipantRoomCodeRouteRoute: ParticipantRoomCodeRouteRoute,
+};
+
+const ParticipantRouteRouteWithChildren =
+  ParticipantRouteRoute._addFileChildren(ParticipantRouteRouteChildren);
+
+interface JoinCodeRouteRouteChildren {
+  JoinCodeIdRouteRoute: typeof JoinCodeIdRouteRoute;
+}
+
+const JoinCodeRouteRouteChildren: JoinCodeRouteRouteChildren = {
+  JoinCodeIdRouteRoute: JoinCodeIdRouteRoute,
+};
+
+const JoinCodeRouteRouteWithChildren = JoinCodeRouteRoute._addFileChildren(
+  JoinCodeRouteRouteChildren
+);
 
 interface RoomRouteRouteChildren {
   RoomIdRouteRoute: typeof RoomIdRouteRoute;
@@ -202,7 +281,7 @@ const RoomRouteRouteChildren: RoomRouteRouteChildren = {
 };
 
 const RoomRouteRouteWithChildren = RoomRouteRoute._addFileChildren(
-  RoomRouteRouteChildren,
+  RoomRouteRouteChildren
 );
 
 interface VotingRoomRouteRouteChildren {
@@ -214,103 +293,129 @@ const VotingRoomRouteRouteChildren: VotingRoomRouteRouteChildren = {
 };
 
 const VotingRoomRouteRouteWithChildren = VotingRoomRouteRoute._addFileChildren(
-  VotingRoomRouteRouteChildren,
+  VotingRoomRouteRouteChildren
 );
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/room': typeof RoomRouteRouteWithChildren;
-  '/voting-room': typeof VotingRoomRouteRouteWithChildren;
-  '/createdRoom': typeof CreatedRoomRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/joinRoom': typeof JoinRoomRoute;
-  '/login': typeof LoginRoute;
-  '/roomView': typeof RoomViewRoute;
-  '/signup': typeof SignupRoute;
-  '/room/$id': typeof RoomIdRouteRoute;
-  '/voting-room/$id': typeof VotingRoomIdRouteRoute;
-  '/room/voteForm': typeof RoomVoteFormRoute;
+  "/": typeof IndexRoute;
+  "/Participant": typeof ParticipantRouteRouteWithChildren;
+  "/joinCode": typeof JoinCodeRouteRouteWithChildren;
+  "/room": typeof RoomRouteRouteWithChildren;
+  "/voting-room": typeof VotingRoomRouteRouteWithChildren;
+  "/createdRoom": typeof CreatedRoomRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/joinRoom": typeof JoinRoomRoute;
+  "/login": typeof LoginRoute;
+  "/roomView": typeof RoomViewRoute;
+  "/signup": typeof SignupRoute;
+  "/Participant/$roomCode": typeof ParticipantRoomCodeRouteRoute;
+  "/joinCode/$id": typeof JoinCodeIdRouteRoute;
+  "/room/$id": typeof RoomIdRouteRoute;
+  "/voting-room/$id": typeof VotingRoomIdRouteRoute;
+  "/room/voteForm": typeof RoomVoteFormRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/room': typeof RoomRouteRouteWithChildren;
-  '/voting-room': typeof VotingRoomRouteRouteWithChildren;
-  '/createdRoom': typeof CreatedRoomRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/joinRoom': typeof JoinRoomRoute;
-  '/login': typeof LoginRoute;
-  '/roomView': typeof RoomViewRoute;
-  '/signup': typeof SignupRoute;
-  '/room/$id': typeof RoomIdRouteRoute;
-  '/voting-room/$id': typeof VotingRoomIdRouteRoute;
-  '/room/voteForm': typeof RoomVoteFormRoute;
+  "/": typeof IndexRoute;
+  "/Participant": typeof ParticipantRouteRouteWithChildren;
+  "/joinCode": typeof JoinCodeRouteRouteWithChildren;
+  "/room": typeof RoomRouteRouteWithChildren;
+  "/voting-room": typeof VotingRoomRouteRouteWithChildren;
+  "/createdRoom": typeof CreatedRoomRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/joinRoom": typeof JoinRoomRoute;
+  "/login": typeof LoginRoute;
+  "/roomView": typeof RoomViewRoute;
+  "/signup": typeof SignupRoute;
+  "/Participant/$roomCode": typeof ParticipantRoomCodeRouteRoute;
+  "/joinCode/$id": typeof JoinCodeIdRouteRoute;
+  "/room/$id": typeof RoomIdRouteRoute;
+  "/voting-room/$id": typeof VotingRoomIdRouteRoute;
+  "/room/voteForm": typeof RoomVoteFormRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
-  '/': typeof IndexRoute;
-  '/room': typeof RoomRouteRouteWithChildren;
-  '/voting-room': typeof VotingRoomRouteRouteWithChildren;
-  '/createdRoom': typeof CreatedRoomRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/joinRoom': typeof JoinRoomRoute;
-  '/login': typeof LoginRoute;
-  '/roomView': typeof RoomViewRoute;
-  '/signup': typeof SignupRoute;
-  '/room/$id': typeof RoomIdRouteRoute;
-  '/voting-room/$id': typeof VotingRoomIdRouteRoute;
-  '/room/voteForm': typeof RoomVoteFormRoute;
+  "/": typeof IndexRoute;
+  "/Participant": typeof ParticipantRouteRouteWithChildren;
+  "/joinCode": typeof JoinCodeRouteRouteWithChildren;
+  "/room": typeof RoomRouteRouteWithChildren;
+  "/voting-room": typeof VotingRoomRouteRouteWithChildren;
+  "/createdRoom": typeof CreatedRoomRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/joinRoom": typeof JoinRoomRoute;
+  "/login": typeof LoginRoute;
+  "/roomView": typeof RoomViewRoute;
+  "/signup": typeof SignupRoute;
+  "/Participant/$roomCode": typeof ParticipantRoomCodeRouteRoute;
+  "/joinCode/$id": typeof JoinCodeIdRouteRoute;
+  "/room/$id": typeof RoomIdRouteRoute;
+  "/voting-room/$id": typeof VotingRoomIdRouteRoute;
+  "/room/voteForm": typeof RoomVoteFormRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/room'
-    | '/voting-room'
-    | '/createdRoom'
-    | '/dashboard'
-    | '/joinRoom'
-    | '/login'
-    | '/roomView'
-    | '/signup'
-    | '/room/$id'
-    | '/voting-room/$id'
-    | '/room/voteForm';
+    | "/"
+    | "/Participant"
+    | "/joinCode"
+    | "/room"
+    | "/voting-room"
+    | "/createdRoom"
+    | "/dashboard"
+    | "/joinRoom"
+    | "/login"
+    | "/roomView"
+    | "/signup"
+    | "/Participant/$roomCode"
+    | "/joinCode/$id"
+    | "/room/$id"
+    | "/voting-room/$id"
+    | "/room/voteForm";
   fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/room'
-    | '/voting-room'
-    | '/createdRoom'
-    | '/dashboard'
-    | '/joinRoom'
-    | '/login'
-    | '/roomView'
-    | '/signup'
-    | '/room/$id'
-    | '/voting-room/$id'
-    | '/room/voteForm';
+    | "/"
+    | "/Participant"
+    | "/joinCode"
+    | "/room"
+    | "/voting-room"
+    | "/createdRoom"
+    | "/dashboard"
+    | "/joinRoom"
+    | "/login"
+    | "/roomView"
+    | "/signup"
+    | "/Participant/$roomCode"
+    | "/joinCode/$id"
+    | "/room/$id"
+    | "/voting-room/$id"
+    | "/room/voteForm";
   id:
-    | '__root__'
-    | '/'
-    | '/room'
-    | '/voting-room'
-    | '/createdRoom'
-    | '/dashboard'
-    | '/joinRoom'
-    | '/login'
-    | '/roomView'
-    | '/signup'
-    | '/room/$id'
-    | '/voting-room/$id'
-    | '/room/voteForm';
+    | "__root__"
+    | "/"
+    | "/Participant"
+    | "/joinCode"
+    | "/room"
+    | "/voting-room"
+    | "/createdRoom"
+    | "/dashboard"
+    | "/joinRoom"
+    | "/login"
+    | "/roomView"
+    | "/signup"
+    | "/Participant/$roomCode"
+    | "/joinCode/$id"
+    | "/room/$id"
+    | "/voting-room/$id"
+    | "/room/voteForm";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  ParticipantRouteRoute: typeof ParticipantRouteRouteWithChildren;
+  JoinCodeRouteRoute: typeof JoinCodeRouteRouteWithChildren;
   RoomRouteRoute: typeof RoomRouteRouteWithChildren;
   VotingRoomRouteRoute: typeof VotingRoomRouteRouteWithChildren;
   CreatedRoomRoute: typeof CreatedRoomRoute;
@@ -323,6 +428,8 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ParticipantRouteRoute: ParticipantRouteRouteWithChildren,
+  JoinCodeRouteRoute: JoinCodeRouteRouteWithChildren,
   RoomRouteRoute: RoomRouteRouteWithChildren,
   VotingRoomRouteRoute: VotingRoomRouteRouteWithChildren,
   CreatedRoomRoute: CreatedRoomRoute,
@@ -344,6 +451,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/Participant",
+        "/joinCode",
         "/room",
         "/voting-room",
         "/createdRoom",
@@ -356,6 +465,18 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/Participant": {
+      "filePath": "Participant/route.tsx",
+      "children": [
+        "/Participant/$roomCode"
+      ]
+    },
+    "/joinCode": {
+      "filePath": "joinCode/route.tsx",
+      "children": [
+        "/joinCode/$id"
+      ]
     },
     "/room": {
       "filePath": "room/route.tsx",
@@ -387,6 +508,14 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/Participant/$roomCode": {
+      "filePath": "Participant/$roomCode/route.tsx",
+      "parent": "/Participant"
+    },
+    "/joinCode/$id": {
+      "filePath": "joinCode/$id/route.tsx",
+      "parent": "/joinCode"
     },
     "/room/$id": {
       "filePath": "room/$id/route.tsx",

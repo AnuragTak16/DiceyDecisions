@@ -1,34 +1,29 @@
 import { baseApi, TAGS } from "../store/api";
 
-interface VoteResult {
+interface Option {
+  id: string;
+  text: string;
+  count: number;
+}
+
+interface VoteResultResponse {
   voteId: string;
   title: string;
-  options: {
-    id: string;
-    text: string;
-    count: number;
-  }[];
+  options: Option[];
   totalVotes: number;
-  winner: {
-    id: string;
-    text: string;
-    count: number;
-  };
+  winner: Option;
   tiebreakerUsed: boolean;
   tiebreakerMethod: "random" | null;
 }
 
 const voteApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getVoteResults: build.query<VoteResult, string>({
-      query: (voteId) => ({
-        url: `/vote/${voteId}`,
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
-      providesTags: [TAGS.VOTES],
+    getVoteResults: build.query<Option[], string>({
+      query: (voteId) => `/result/${voteId}`,
+      transformResponse: (response: VoteResultResponse) => response.options,
+      providesTags: (result, error, voteId) => [
+        { type: TAGS.VOTES, id: voteId },
+      ],
     }),
   }),
 });

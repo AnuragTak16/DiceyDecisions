@@ -1,47 +1,23 @@
-import { baseApi, TAGS } from "@/store/api";
+import { baseApi, TAGS } from '@/store/api';
 
-export interface Participant {
-  name: string;
-  userId: string;
-  _id: string;
-  joinedAt: string;
-}
-
-export interface Room {
-  name: ReactNode;
-  _id: string;
-  title: string;
-  description: string;
-  maxParticipants: number;
-  creatorId: {
-    _id: string;
-    userName: string;
-    email: string;
-  };
+// Define the type for the query parameters
+type GetParticipantsParams = {
   roomCode: string;
-  inviteLink: string;
-  isOpen: boolean;
-  createdAt: string;
-  participants: Participant[];
-}
-
-interface GetParticipantsParams {
-  roomCode: string;
-}
+};
 
 const getParticipant = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getParticipant: build.query<Room[], GetParticipantsParams>({
+    getParticipant: build.query<string[], GetParticipantsParams>({
       query: ({ roomCode }) => ({
-        url: `/roomParticipant/${roomCode}`,
-        method: "GET",
+        url: `/room/${roomCode}/participants`,
+        method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        // params: {
-        //   code: roomCode,
-        // },
       }),
+      transformResponse: (response: { participantNames: string[] }) =>
+        response.participantNames,
+
       providesTags: [TAGS.ROOMS],
     }),
   }),

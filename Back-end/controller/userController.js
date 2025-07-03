@@ -1,13 +1,13 @@
 // controllers/authController.js (or similar file)
-const User = require("../model/signupUser");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { nanoid } = require("nanoid");
-const Room = require("../model/room");
-const SignupUser = require("../model/signupUser");
+const User = require('../model/signupUser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { nanoid } = require('nanoid');
+const Room = require('../model/room');
+const SignupUser = require('../model/signupUser');
 
 const home = (req, res) => {
-  res.send("Hello from the server");
+  res.send('Hello from the server');
 };
 
 //signup user API
@@ -15,7 +15,7 @@ const signup = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.status(422).json({ error: "Please fill all the fields" });
+    return res.status(422).json({ error: 'Please fill all the fields' });
   }
 
   try {
@@ -23,7 +23,7 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res
         .status(409)
-        .json({ error: "User already exists with this email" });
+        .json({ error: 'User already exists with this email' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     // Create new user (do not save confirmPassword)
@@ -34,10 +34,10 @@ const signup = async (req, res) => {
     });
 
     await user.save();
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error("Signup Error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Signup Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -46,18 +46,18 @@ const loginPage = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(422).json({ error: "Please fill all the fields" });
+    return res.status(422).json({ error: 'Please fill all the fields' });
   }
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.status(400).json({ error: 'Invalid email or password' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.status(400).json({ error: 'Invalid email or password' });
     }
 
     //JWT token create
@@ -65,13 +65,13 @@ const loginPage = async (req, res) => {
       { userId: user._id, userName: user.name, email: user.email },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: '1d',
       }
     );
 
     // send to fronted
     res.status(200).json({
-      message: "Login successful",
+      message: 'Login successful',
       token,
       user: {
         id: user._id,
@@ -80,8 +80,8 @@ const loginPage = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -104,15 +104,15 @@ const createRoom = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Room created successfully!",
+      message: 'Room created successfully!',
       roomCode,
       inviteLink,
     });
   } catch (err) {
-    console.error("Error creating room:", err);
+    console.error('Error creating room:', err);
     res
       .status(500)
-      .json({ message: "Failed to create room", error: err.message });
+      .json({ message: 'Failed to create room', error: err.message });
   }
 };
 
@@ -122,12 +122,12 @@ const joinRoom = async (req, res) => {
   const { roomCode } = req.body;
 
   if (!roomCode || !userId) {
-    return res.status(400).json({ error: "Room code and login required" });
+    return res.status(400).json({ error: 'Room code and login required' });
   }
 
   const room = await Room.findOne({ roomCode });
-  if (!room) return res.status(404).json({ error: "Room not found" });
-  if (!room.isOpen) return res.status(403).json({ error: "Room is closed" });
+  if (!room) return res.status(404).json({ error: 'Room not found' });
+  if (!room.isOpen) return res.status(403).json({ error: 'Room is closed' });
 
   const alreadyJoined = room.participants.some(
     (p) => p.userId?.toString() === userId
@@ -135,11 +135,11 @@ const joinRoom = async (req, res) => {
 
   // ✅ If already joined, skip adding again and return success
   if (alreadyJoined) {
-    return res.json({ message: "Already joined", roomId: room._id });
+    return res.json({ message: 'Already joined', roomId: room._id });
   }
 
   const user = await SignupUser.findById(userId);
-  if (!user) return res.status(404).json({ error: "User not found" });
+  if (!user) return res.status(404).json({ error: 'User not found' });
 
   // Add user to participants list
   room.participants.push({
@@ -149,7 +149,7 @@ const joinRoom = async (req, res) => {
 
   await room.save();
 
-  res.json({ message: "Joined successfully", roomId: room._id });
+  res.json({ message: 'Joined successfully', roomId: room._id });
 };
 
 //Join Room with link
@@ -158,22 +158,22 @@ const joinRoomFromLink = async (req, res) => {
   const { roomCode } = req.params;
 
   if (!roomCode || !userId) {
-    return res.status(400).json({ error: "Room code and login required" });
+    return res.status(400).json({ error: 'Room code and login required' });
   }
 
   const room = await Room.findOne({ roomCode });
-  if (!room) return res.status(404).json({ error: "Room not found" });
-  if (!room.isOpen) return res.status(403).json({ error: "Room is closed" });
+  if (!room) return res.status(404).json({ error: 'Room not found' });
+  if (!room.isOpen) return res.status(403).json({ error: 'Room is closed' });
 
   const alreadyJoined = room.participants.some(
     (p) => p.userId?.toString() === userId
   );
   if (alreadyJoined) {
-    return res.status(200).json({ message: "Already joined", room });
+    return res.status(200).json({ message: 'Already joined', room });
   }
 
   const user = await User.findById(userId);
-  if (!user) return res.status(404).json({ error: "User not found" });
+  if (!user) return res.status(404).json({ error: 'User not found' });
 
   room.participants.push({
     name: user.name,
@@ -182,14 +182,14 @@ const joinRoomFromLink = async (req, res) => {
 
   await room.save();
 
-  res.status(200).json({ message: "Joined via link", room });
+  res.status(200).json({ message: 'Joined via link', room });
 };
 
 // GET-API/rooms-created
 const getCreatedRooms = async (req, res) => {
   const userId = req.user?.id;
   // console.log(userId);
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
   const rooms = await Room.find({ creatorId: userId });
   console.log(rooms);
@@ -203,31 +203,40 @@ const roomDetails = async (req, res) => {
     const userId = req.user._id;
 
     const rooms = await Room.find({
-      $or: [{ creatorId: userId }, { "participants.userId": userId }],
+      $or: [{ creatorId: userId }, { 'participants.userId': userId }],
     })
-      .populate("creatorId", "name email") // This is the key part you're missing
+      .populate('creatorId', 'name email') // This is the key part you're missing
       .sort({ createdAt: -1 });
 
     console.log(`Fetched ${rooms.length} room(s) for user ${userId}`);
 
     res.status(200).json(rooms);
   } catch (error) {
-    console.error("Failed to fetch room details:", error);
-    res.status(500).json({ message: "Server Error" });
+    console.error('Failed to fetch room details:', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
 // Get room participants by room code and link
-const getParticipants = async (req, res) => {
-  console.log("room", req.params.code);
-
+const getParticipantNames = async (req, res) => {
   try {
-    const room = await Room.findOne({ roomCode: req.params.code });
-    if (!room) return res.status(404).json({ message: "Room not found" });
+    const roomCode = req.params.roomCode;
 
-    res.json(room.participants);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    const room = await Room.findOne(
+      { roomCode: roomCode },
+      'participants.name'
+    );
+
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+
+    const participantNames = room.participants.map((p) => p.name);
+
+    res.status(200).json({ participantNames });
+  } catch (error) {
+    console.error('Error fetching participants by roomCode:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -235,17 +244,17 @@ const getParticipants = async (req, res) => {
 const deleteRoom = async (req, res) => {
   const roomId = req.params.id;
   try {
-    console.log("Deleting room with ID:", req.params.id);
+    console.log('Deleting room with ID:', req.params.id);
 
     const room = await Room.findByIdAndDelete(req.params.id);
     if (!room) {
-      return res.status(404).json({ message: "Room not found" });
+      return res.status(404).json({ message: 'Room not found' });
     }
 
-    res.status(200).json({ message: "Room deleted successfully" });
+    res.status(200).json({ message: 'Room deleted successfully' });
   } catch (err) {
-    console.error("Error in deleteRoom:", err);
-    res.status(500).json({ message: "Internal server error" });
+    console.error('Error in deleteRoom:', err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -259,6 +268,6 @@ module.exports = {
   joinRoom,
   getCreatedRooms,
   roomDetails,
-  getParticipants,
+  getParticipantNames,
   deleteRoom,
 };

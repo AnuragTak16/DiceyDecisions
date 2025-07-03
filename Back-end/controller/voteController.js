@@ -1,4 +1,4 @@
-const Vote = require("../model/vote");
+const Vote = require('../model/vote');
 
 const createVote = async (req, res) => {
   try {
@@ -37,10 +37,10 @@ const createVote = async (req, res) => {
 
     await newVote.save();
 
-    res.status(201).json({ message: "Vote created", vote: newVote });
+    res.status(201).json({ message: 'Vote created', vote: newVote });
   } catch (err) {
-    console.error("Create Vote Error:", err);
-    res.status(500).json({ error: "Failed to create vote" });
+    console.error('Create Vote Error:', err);
+    res.status(500).json({ error: 'Failed to create vote' });
   }
 };
 
@@ -49,7 +49,7 @@ const openVote = async (req, res) => {
   const { voteId } = req.params;
   const vote = await Vote.findById(voteId);
 
-  if (!vote) return res.status(404).json({ error: "Vote not found" });
+  if (!vote) return res.status(404).json({ error: 'Vote not found' });
 
   // Set current time as startTime
   const now = new Date();
@@ -63,11 +63,11 @@ const openVote = async (req, res) => {
   vote.hasEnded = false;
 
   await vote.save();
-  res.json({ message: "Voting opened", vote });
+  res.json({ message: 'Voting opened', vote });
 };
 
 //cast votes means started voting
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 
 const castVote = async (req, res) => {
   const { voteId } = req.params;
@@ -76,12 +76,12 @@ const castVote = async (req, res) => {
 
   try {
     const vote = await Vote.findById(voteId);
-    if (!vote) return res.status(404).json({ error: "Vote not found" });
+    if (!vote) return res.status(404).json({ error: 'Vote not found' });
 
     // Removed the check for vote.isOpen and vote.hasEnded here
 
     if (vote.votedUsers.includes(userId))
-      return res.status(403).json({ error: "You have already voted" });
+      return res.status(403).json({ error: 'You have already voted' });
 
     let optionFound = false;
 
@@ -100,7 +100,7 @@ const castVote = async (req, res) => {
     }
 
     if (!optionFound)
-      return res.status(400).json({ error: "Option not found" });
+      return res.status(400).json({ error: 'Option not found' });
 
     vote.votedUsers.push(userId);
     await vote.save();
@@ -110,14 +110,14 @@ const castVote = async (req, res) => {
     const winners = vote.options.filter((o) => o.count === maxVotes);
 
     res.json({
-      message: "Vote recorded",
+      message: 'Vote recorded',
       totalVotes,
       options: vote.options,
       winners,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -126,11 +126,11 @@ const getVotes = async (req, res) => {
     const { roomId } = req.params;
     const votes = await Vote.find({ roomCode: roomId });
     if (!votes) {
-      return res.status(404).json({ error: "No votes found for this room" });
+      return res.status(404).json({ error: 'No votes found for this room' });
     }
     res.json(votes);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -140,7 +140,7 @@ const getVotingList = async (req, res) => {
     const votes = await Vote.find();
 
     if (!votes || votes.length === 0) {
-      return res.status(404).json({ error: "No votes found" });
+      return res.status(404).json({ error: 'No votes found' });
     }
 
     const formattedVotes = votes.map((vote) => {
@@ -159,8 +159,8 @@ const getVotingList = async (req, res) => {
 
     res.json(formattedVotes);
   } catch (error) {
-    console.error("Get Voting List Error:", error);
-    res.status(500).json({ error: "Failed to retrieve votes" });
+    console.error('Get Voting List Error:', error);
+    res.status(500).json({ error: 'Failed to retrieve votes' });
   }
 };
 
@@ -169,13 +169,13 @@ const closeVote = async (req, res) => {
   const { voteId } = req.params;
   const vote = await Vote.findById(voteId);
 
-  if (!vote) return res.status(404).json({ error: "Vote not found" });
+  if (!vote) return res.status(404).json({ error: 'Vote not found' });
 
   vote.hasEnded = true;
   vote.isOpen = false;
   await vote.save();
 
-  res.json({ message: "Voting ended" });
+  res.json({ message: 'Voting ended' });
 };
 
 //result one
@@ -185,17 +185,17 @@ const getResults = async (req, res) => {
 
     // Validate voteId
     if (!mongoose.Types.ObjectId.isValid(voteId)) {
-      return res.status(400).json({ error: "Invalid vote ID format" });
+      return res.status(400).json({ error: 'Invalid vote ID format' });
     }
 
     const vote = await Vote.findById(voteId);
 
     if (!vote) {
-      return res.status(404).json({ error: "Vote not found" });
+      return res.status(404).json({ error: 'Vote not found' });
     }
 
     if (!vote.hasEnded) {
-      return res.status(403).json({ error: "Results not available yet" });
+      return res.status(403).json({ error: 'Results not available yet' });
     }
 
     const options = vote.options.map((opt) => ({
@@ -221,7 +221,7 @@ const getResults = async (req, res) => {
       // Example 1: Random selection among tied options (fair tiebreaker)
       const randomIndex = Math.floor(Math.random() * topOptions.length);
       winner = topOptions[randomIndex];
-      tiebreakerMethod = "random";
+      tiebreakerMethod = 'random';
     }
 
     res.status(200).json({
@@ -234,8 +234,32 @@ const getResults = async (req, res) => {
       tiebreakerMethod,
     });
   } catch (error) {
-    console.error("Error getting results:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error getting results:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+//getPastPOLL
+const getPastPoll = async (req, res) => {
+  try {
+    const polls = await Poll.find({ creatorId: req.params.creatorId }).sort({
+      createdAt: -1,
+    });
+    res.json(polls);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+//voting-id we get
+
+const getvotingRoomId = async (req, res) => {
+  try {
+    const room = await VotingRoom.findById(req.params.id);
+    if (!room) return res.status(404).json({ message: 'Room not found' });
+    res.json(room);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -247,4 +271,6 @@ module.exports = {
   openVote,
   getVotes,
   createVote,
+  getPastPoll,
+  getvotingRoomId,
 };
